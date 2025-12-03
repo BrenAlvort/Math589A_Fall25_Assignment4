@@ -1,20 +1,15 @@
-CC=gcc
-CFLAGS=-Wall -Wextra -std=c11 -O2 -fPIC
-LDFLAGS=-lm
+CC = gcc
+CFLAGS = -fPIC -Wall -Wextra -O2
+LDFLAGS = -shared
+LIB = libfixed_point.so
 
-all: main libfixed_point.so
+all: $(LIB)
 
-main: main.o fixed_point.o
-	$(CC) -o $@ main.o fixed_point.o $(LDFLAGS)
+$(LIB): fixed_point.o
+	$(CC) $(LDFLAGS) -o $(LIB) fixed_point.o -lm
 
 fixed_point.o: fixed_point.c fixed_point.h
 	$(CC) $(CFLAGS) -c fixed_point.c
 
-main.o: main.c fixed_point.h
-	$(CC) $(CFLAGS) -c main.c
-
-libfixed_point.so: fixed_point.o
-	$(CC) -shared -o $@ fixed_point.o $(LDFLAGS)
-
 clean:
-	rm -f *.o main libfixed_point.so
+	rm -f *.o *.so main
